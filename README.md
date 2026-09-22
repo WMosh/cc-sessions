@@ -82,8 +82,12 @@ a bare shell — it has no way to know *which* conversation belonged there.
 cc-sessions does. Let resurrect rebuild the layout, then chain this on:
 
 ```tmux
-set -g @resurrect-hook-post-restore-all 'cc-sessions restore --tmux'
+set -g @resurrect-hook-post-restore-all 'sleep 3 && cc-sessions restore --tmux'
 ```
+
+The short delay lets the restored panes' shells finish starting before they're
+sent anything — without it a pane can still be initialising when the hook fires,
+and the resume is skipped as "busy".
 
 Reboot, and the layout comes back with every Claude Code session live in the
 pane it was in.
